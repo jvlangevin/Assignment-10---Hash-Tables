@@ -12,14 +12,41 @@ public class QuadProbeHashTable implements Set<String>{
      * specified by the given functor.
      */
    public QuadProbeHashTable(int capacity, HashFunctor functor){
-	   	   
-	   table = new String[capacity];
-	   hashFunctor = functor;
+	   
+	   this.size = 0;
+	   this.table = new String[this.getNextPrime(capacity)]; //always sets the capacity to be a prime at start
+	   this.hashFunctor = functor;
    }
 	
 	@Override
 	public boolean add(String item) {
-		// TODO Auto-generated method stub
+		
+		//checks if this.table is half full 
+		//rehashes if it is; rehash resizes table to next prime number 
+		//and assigns previous items to the new hashTable
+		if(this.isTableHalfFull())
+		{
+			this.rehash();
+		}
+		
+		
+		//sets the initial index
+		int index = item.length()%this.table.length;
+		int quadValue = 1;
+		
+		while(this.table[index] != null)
+		{
+			/*if the index isn't empty the index should increase at a rate
+			  of 1, 4, 9, 16, 25 (growing by squares) BUT is then reduced by 
+			  modulo table size, so if the table size is 17 (prime #, it would go to index
+			  1, 4, 9, 16, 8  */
+			index = index + quadValue%this.table.length;
+			quadValue = quadValue+1;
+			quadValue = quadValue*quadValue;
+		}
+		
+		this.table[index] = item;
+		
 		return false;
 	}
 
@@ -44,8 +71,8 @@ public class QuadProbeHashTable implements Set<String>{
 	@Override
 	public void clear() {
 
-		for(int i = 0; i < table.length; i++){
-			table[i] = null;
+		for(int i = 0; i < this.table.length; i++){
+			this.table[i] = null;
 		}
 	}
 
@@ -110,6 +137,35 @@ public class QuadProbeHashTable implements Set<String>{
 			num += 2;
 		}
 		return num;
+	}
+	
+	
+	/**
+	 * Checks to see if the table is half full. Array table should be resized once it's halfway full.
+	 * @return boolean based on size of elements vs length of table.
+	 */
+	private boolean isTableHalfFull(){
+		if(this.size() >= this.table.length){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	/**
+	 * Function to rehash array.
+	 * Steps: 1. Create thisHash and assign this HashTable to it's values.
+	 * 		  2. create a tempHash with our new size, which is the next prime number after it's length
+	 */
+	private void rehash(){
+		
+		QuadProbeHashTable thisHash = this;
+		QuadProbeHashTable tempHash = new QuadProbeHashTable(this.getNextPrime(this.table.length), this.hashFunctor);
+		tempHash.addAll(this.table);
+		thisHash.clear();
+		thisHash = tempHash;
+	
 	}
 
 	public static void main(String[] args){
