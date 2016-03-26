@@ -2,12 +2,18 @@ package assignment10;
 
 import java.util.Collection;
 
-public class ChainingHashTable implements Set<String>{
+public class ChainingHashTable implements Set<String> {
+
+	private int size;
+	private HashFunctor hashFunctor;
+	private String[] table;
 
 	public ChainingHashTable(int capacity, HashFunctor functor){
-		
+
+		table = new String[capacity];
+		hashFunctor = functor;
 	}
-	
+
 	@Override
 	public boolean add(String item) {
 		// TODO Auto-generated method stub
@@ -16,14 +22,28 @@ public class ChainingHashTable implements Set<String>{
 
 	@Override
 	public boolean addAll(Collection<? extends String> items) {
-		// TODO Auto-generated method stub
+
+		int initialSize = size;
+
+		for (String item : items) {
+			if (!contains(item)) {
+				add(item);
+				size++;
+			}
+		}
+
+		if (size != initialSize) {
+			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public void clear() {
-		// TODO Auto-generated method stub
-		
+
+		for(int i = 0; i < table.length; i++){
+			table[i] = null;
+		}
 	}
 
 	@Override
@@ -34,20 +54,23 @@ public class ChainingHashTable implements Set<String>{
 
 	@Override
 	public boolean containsAll(Collection<? extends String> items) {
-		// TODO Auto-generated method stub
-		return false;
+
+		for(String item : items){
+			if(!contains(item)){
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
+		return size() == 0;
 	}
 
 	@Override
 	public int size() {
-		// TODO Auto-generated method stub
-		return 0;
+		return size;
 	}
 
 }
