@@ -8,15 +8,12 @@ public class ChainingHashTable implements Set<String> {
 	private int size;
 	private HashFunctor hashFunctor;
 	private LinkedList<String>[] storage;
+	private int storageSize;
 
 	@SuppressWarnings("unchecked")
 	public ChainingHashTable(int capacity, HashFunctor functor){
 
 		storage = (LinkedList<String>[]) new LinkedList[capacity];
-		
-		//following the instructions on the assignment, added storage as linked list
-		//unsure if storage of string array necessary. 
-		//storage = new String[capacity];
 		hashFunctor = functor;
 	}
 
@@ -31,6 +28,7 @@ public class ChainingHashTable implements Set<String> {
 		
 		if(storage[index] == null){
 			storage[index] = new LinkedList<>();
+			storageSize++;
 		}
 		
 		storage[index].addLast(item);
@@ -110,7 +108,7 @@ public class ChainingHashTable implements Set<String> {
 			}
 		}
 		
-		int averageListSize = totalListSize / size;
+		int averageListSize = totalListSize / storageSize;
 		return averageListSize;
 	}
 	
