@@ -171,6 +171,9 @@ public class QuadProbeHashTable implements Set<String>{
 	 */
 	private static int getNextPrime(int num){
 		
+		if(num == 2){
+			return 3;
+		}
 		if(num % 2 == 0){
 			num++;
 		}
@@ -229,5 +232,6 @@ public class QuadProbeHashTable implements Set<String>{
 	public int collisionCount(){
 		return this.collisions;
 	}
+	
 	
 }

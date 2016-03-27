@@ -8,7 +8,6 @@ public class ChainingHashTable implements Set<String> {
 	private int size;
 	private HashFunctor hashFunctor;
 	private LinkedList<String>[] storage;
-	private String[] table;
 
 	@SuppressWarnings("unchecked")
 	public ChainingHashTable(int capacity, HashFunctor functor){
@@ -16,15 +15,27 @@ public class ChainingHashTable implements Set<String> {
 		storage = (LinkedList<String>[]) new LinkedList[capacity];
 		
 		//following the instructions on the assignment, added storage as linked list
-		//unsure if table of string array necessary. 
-		//table = new String[capacity];
+		//unsure if storage of string array necessary. 
+		//storage = new String[capacity];
 		hashFunctor = functor;
 	}
 
 	@Override
 	public boolean add(String item) {
-		// TODO Auto-generated method stub
-		return false;
+
+		if(contains(item)){
+			return false;
+		}
+		
+		int index = hashFunctor.hash(item) % storage.length;
+		
+		if(storage[index] == null){
+			storage[index] = new LinkedList<>();
+		}
+		
+		storage[index].addLast(item);
+		size++;
+		return true;
 	}
 
 	@Override
@@ -47,16 +58,22 @@ public class ChainingHashTable implements Set<String> {
 	@Override
 	public void clear() {
 
-		for(int i = 0; i < table.length; i++){
-			table[i] = null;
+		for(int i = 0; i < storage.length; i++){
+			storage[i] = null;
 		}
 		this.size = 0;
 	}
 
 	@Override
 	public boolean contains(String item) {
-		// TODO Auto-generated method stub
-		return false;
+
+		int index = hashFunctor.hash(item) % storage.length;
+		
+		if(storage[index] == null){
+			return false;
+		}
+		
+		return storage[index].contains(item);
 	}
 
 	@Override
@@ -80,4 +97,21 @@ public class ChainingHashTable implements Set<String> {
 		return size;
 	}
 
+	/**
+	 * Returns the average size of the lists contained in the hash table.
+	 */
+	private int getLoadFactor(){
+		
+		int totalListSize = 0;
+		
+		for(int i = 0; i < storage.length; i++){
+			if(storage[i] != null){
+				totalListSize += storage[i].size();
+			}
+		}
+		
+		int averageListSize = totalListSize / size;
+		return averageListSize;
+	}
+	
 }
