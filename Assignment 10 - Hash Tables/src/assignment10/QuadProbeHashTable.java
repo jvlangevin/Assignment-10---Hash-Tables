@@ -31,7 +31,7 @@ public class QuadProbeHashTable implements Set<String>{
 		
 		
 		//sets the initial index
-		int index = item.length()%this.table.length;
+		int index = (this.hashFunctor.hash(item))%this.table.length;
 		int quadValue = 1;
 		
 		while(this.table[index] != null)

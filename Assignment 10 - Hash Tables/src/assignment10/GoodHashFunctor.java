@@ -2,10 +2,15 @@ package assignment10;
 
 public class GoodHashFunctor implements HashFunctor {
 
+	
+	//return value will be the value of the character multiplied by twice the position in the string
 	@Override
 	public int hash(String item) {
-		// TODO Auto-generated method stub
-		return 0;
+		int index = 0;
+		for(int i = 0; i < item.length(); i++){
+			index += Character.getNumericValue(item.charAt(i)) * (i*2);
+		}
+		return index;
 	}
 
 }
