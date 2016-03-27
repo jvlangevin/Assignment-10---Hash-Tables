@@ -14,12 +14,21 @@ public class QuadProbeHashTable implements Set<String>{
    public QuadProbeHashTable(int capacity, HashFunctor functor){
 	   
 	   this.size = 0;
-	   this.table = new String[this.getNextPrime(capacity)]; //always sets the capacity to be a prime at start
+	   if(!isPrime(capacity)){
+		   this.table = new String[getNextPrime(capacity)]; //always sets the capacity to be a prime at start
+	   }
+	   else{
+		   this.table = new String[capacity];
+	   }
 	   this.hashFunctor = functor;
    }
 	
 	@Override
 	public boolean add(String item) {
+		
+		if(contains(item)){
+			return false;
+		}
 		
 		//checks if this.table is half full 
 		//rehashes if it is; rehash resizes table to next prime number 
@@ -29,25 +38,27 @@ public class QuadProbeHashTable implements Set<String>{
 			this.rehash();
 		}
 		
-		
 		//sets the initial index
-		int index = (this.hashFunctor.hash(item))%this.table.length;
+		int initialIndex = hashFunctor.hash(item) % table.length;
+		int index = initialIndex;
 		int quadValue = 1;
 		
 		while(this.table[index] != null)
 		{
+			index = initialIndex;
+			
 			/*if the index isn't empty the index should increase at a rate
 			  of 1, 4, 9, 16, 25 (growing by squares) BUT is then reduced by 
 			  modulo table size, so if the table size is 17 (prime #, it would go to index
 			  1, 4, 9, 16, 8  */
-			index = index + quadValue%this.table.length;
-			quadValue = quadValue+1;
-			quadValue = quadValue*quadValue;
+			index += quadValue * quadValue % table.length;
+			quadValue++;
 		}
 		
 		this.table[index] = item;
+		size++;
 		
-		return false;
+		return true;
 	}
 
 	@Override
@@ -107,7 +118,7 @@ public class QuadProbeHashTable implements Set<String>{
 	 * 
 	 * Returns true if the specified integer is prime, returns false otherwise.
 	 */
-	private boolean isPrime(int num){
+	private static boolean isPrime(int num){
 		
 		if(num == 2){
 			return true;
@@ -127,15 +138,16 @@ public class QuadProbeHashTable implements Set<String>{
 	/**
 	 * Returns the next largest prime after the specified number.
 	 */
-	private int getNextPrime(int num){
+	private static int getNextPrime(int num){
 		
 		if(num % 2 == 0){
 			num++;
 		}
 		
-		while(!isPrime(num)){
+		do{
 			num += 2;
-		}
+		}while(!isPrime(num));
+		
 		return num;
 	}
 	
@@ -145,7 +157,7 @@ public class QuadProbeHashTable implements Set<String>{
 	 * @return boolean based on size of elements vs length of table.
 	 */
 	private boolean isTableHalfFull(){
-		if(this.size() >= this.table.length){
+		if(size >= table.length / 2){
 			return true;
 		}
 		else{
@@ -160,16 +172,15 @@ public class QuadProbeHashTable implements Set<String>{
 	 */
 	private void rehash(){
 		
-		QuadProbeHashTable thisHash = this;
-		QuadProbeHashTable tempHash = new QuadProbeHashTable(this.getNextPrime(this.table.length), this.hashFunctor);
-		tempHash.addAll(this.table);
-		thisHash.clear();
-		thisHash = tempHash;
+		String[] tempHash = new String[getNextPrime(table.length)];
+		
+		for(int i = 0; i < table.length; i++){
+			tempHash[i] = table[i];
+		}
+		
+		table = tempHash;
 	
 	}
 
-	public static void main(String[] args){
-		
-		QuadProbeHashTable q = new QuadProbeHashTable(3, new BadHashFunctor());
-	}
+	
 }
