@@ -1,16 +1,23 @@
 package assignment10;
 
 import java.util.Collection;
+import java.util.LinkedList;
 
 public class ChainingHashTable implements Set<String> {
 
 	private int size;
 	private HashFunctor hashFunctor;
+	private LinkedList<String>[] storage;
 	private String[] table;
 
+	@SuppressWarnings("unchecked")
 	public ChainingHashTable(int capacity, HashFunctor functor){
 
-		table = new String[capacity];
+		storage = (LinkedList<String>[]) new LinkedList[capacity];
+		
+		//following the instructions on the assignment, added storage as linked list
+		//unsure if table of string array necessary. 
+		//table = new String[capacity];
 		hashFunctor = functor;
 	}
 
@@ -28,7 +35,6 @@ public class ChainingHashTable implements Set<String> {
 		for (String item : items) {
 			if (!contains(item)) {
 				add(item);
-				size++;
 			}
 		}
 
@@ -44,6 +50,7 @@ public class ChainingHashTable implements Set<String> {
 		for(int i = 0; i < table.length; i++){
 			table[i] = null;
 		}
+		this.size = 0;
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package assignment10;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class QuadProbeHashTable implements Set<String>{
@@ -7,6 +8,8 @@ public class QuadProbeHashTable implements Set<String>{
 	private int size;
 	private HashFunctor hashFunctor;
 	private String[] table;
+	private int rehashedCount;
+	private int collisions;
 	
 	/** Constructs a hash table of the given capacity that uses the hashing function
      * specified by the given functor.
@@ -14,6 +17,8 @@ public class QuadProbeHashTable implements Set<String>{
    public QuadProbeHashTable(int capacity, HashFunctor functor){
 	   
 	   this.size = 0;
+	   this.rehashedCount = 0;
+	   this.collisions = 0;
 	   if(!isPrime(capacity)){
 		   this.table = new String[getNextPrime(capacity)]; //always sets the capacity to be a prime at start
 	   }
@@ -45,13 +50,14 @@ public class QuadProbeHashTable implements Set<String>{
 		
 		while(this.table[index] != null)
 		{
+			this.collisions++;
 			index = initialIndex;
 			
 			/*if the index isn't empty the index should increase at a rate
 			  of 1, 4, 9, 16, 25 (growing by squares) BUT is then reduced by 
 			  modulo table size, so if the table size is 17 (prime #, it would go to index
 			  1, 4, 9, 16, 8  */
-			index += quadValue * quadValue % table.length;
+			index = (index + (quadValue * quadValue)) % table.length;
 			quadValue++;
 		}
 		
@@ -69,7 +75,6 @@ public class QuadProbeHashTable implements Set<String>{
 		for(String item : items){
 			if(!contains(item)){
 				add(item);
-				size++;
 			}
 		}
 		
@@ -85,11 +90,37 @@ public class QuadProbeHashTable implements Set<String>{
 		for(int i = 0; i < this.table.length; i++){
 			this.table[i] = null;
 		}
+		this.size = 0;
 	}
 
 	@Override
 	public boolean contains(String item) {
-		// TODO Auto-generated method stub
+		int initialIndex = hashFunctor.hash(item) % table.length;
+		int index = initialIndex;
+		int quadValue = 1;
+		
+		/*if we ever run into a null following the quadratic probing algorithm, 
+		 * the item isn't contained. Note: because the number of items should be half
+		 * the size of the array, we should hit a null if it's not contained.
+		 */
+		while(this.table[index] != null)
+		{
+			//if the item is found, return true;
+			if(this.table[index] == item)
+			{
+				return true;
+			}
+			
+			index = initialIndex;
+			
+			/*if the index isn't empty the index should increase at a rate
+			  of 1, 4, 9, 16, 25 (growing by squares) BUT is then reduced by 
+			  modulo table size, so if the table size is 17 (prime #, it would go to index
+			  1, 4, 9, 16, 8  */
+			index = (index + (quadValue * quadValue)) % table.length;
+			quadValue++;
+		}
+		
 		return false;
 	}
 
@@ -171,16 +202,32 @@ public class QuadProbeHashTable implements Set<String>{
 	 * 		  2. create a tempHash with our new size, which is the next prime number after it's length
 	 */
 	private void rehash(){
+		this.rehashedCount++;
 		
 		String[] tempHash = new String[getNextPrime(table.length)];
+		ArrayList<String> valueHolder = new ArrayList<>();
 		
 		for(int i = 0; i < table.length; i++){
-			tempHash[i] = table[i];
+			
+			if(table[i] != null){
+				valueHolder.add(table[i]);
+			}
+			
 		}
 		
-		table = tempHash;
+		this.clear();
+		this.table = tempHash;
+		this.addAll(valueHolder);
+	
 	
 	}
 
+	public int timesRehashed(){
+		return this.rehashedCount;
+	}
+	
+	public int collisionCount(){
+		return this.collisions;
+	}
 	
 }
