@@ -8,9 +8,9 @@ public class GoodHashFunctor implements HashFunctor {
 	public int hash(String item) {
 		int index = 0;
 		for(int i = 0; i < item.length(); i++){
-			index += Character.getNumericValue(item.charAt(i)) * (i*2);
+			index += Character.getNumericValue(item.charAt(i)) * (i*23) - (i*item.length()+Character.getNumericValue(item.charAt(0)));
 		}
-		return index;
+		return index+item.length();
 	}
 
 }

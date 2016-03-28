@@ -40,7 +40,7 @@ public class QuadProbeHashTable implements Set<String>{
 		//and assigns previous items to the new hashTable
 		if(this.isTableHalfFull())
 		{
-			this.rehash();
+			this.rehash(table.length*2);
 		}
 		
 		//sets the initial index
@@ -72,10 +72,16 @@ public class QuadProbeHashTable implements Set<String>{
 
 		int initialSize = size;
 		
+		if(items.size() > (table.length/2)+this.size())
+		{
+			this.rehash(items.size()*3);
+
+		}
+		
 		for(String item : items){
-			if(!contains(item)){
+			
 				add(item);
-			}
+			
 		}
 		
 		if(size != initialSize){
@@ -106,8 +112,9 @@ public class QuadProbeHashTable implements Set<String>{
 		while(this.table[index] != null)
 		{
 			//if the item is found, return true;
-			if(this.table[index] == item)
+			if(this.table[index].equals(item))
 			{
+				System.out.println("If was true");
 				return true;
 			}
 			
@@ -204,10 +211,10 @@ public class QuadProbeHashTable implements Set<String>{
 	 * Steps: 1. Create thisHash and assign this HashTable to it's values.
 	 * 		  2. create a tempHash with our new size, which is the next prime number after it's length
 	 */
-	private void rehash(){
+	private void rehash(int firstPrimeAfterThis){
 		this.rehashedCount++;
 		
-		String[] tempHash = new String[getNextPrime(table.length)];
+		String[] tempHash = new String[getNextPrime(firstPrimeAfterThis)];
 		ArrayList<String> valueHolder = new ArrayList<>();
 		
 		for(int i = 0; i < table.length; i++){
@@ -233,5 +240,13 @@ public class QuadProbeHashTable implements Set<String>{
 		return this.collisions;
 	}
 	
+	public int tableLength(){
+		return this.table.length;
+	}
+	
+	public String getItemByIndex(int index){
+		
+		return this.table[index];
+	}
 	
 }
