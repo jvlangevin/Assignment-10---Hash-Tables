@@ -23,7 +23,7 @@ public class ChainingHashTable implements Set<String> {
 
 	@Override
 	public boolean add(String item) {
-
+		
 		if(contains(item)){
 			return false;
 		}
@@ -124,7 +124,7 @@ public class ChainingHashTable implements Set<String> {
 			}
 		}
 		
-		int averageListSize = totalListSize / storageSize;
+		int averageListSize = totalListSize / storage.length;
 		return averageListSize;
 	}
 	
@@ -211,7 +211,12 @@ public class ChainingHashTable implements Set<String> {
 		int largestListSize =0;
 		for(int i = 0; i < storage.length; i++)
 		{
-			largestListSize = Math.max(largestListSize, storage[i].size());
+			if(storage[i] == null){
+				largestListSize = Math.max(largestListSize, 0);
+			}
+			else{
+				largestListSize = Math.max(largestListSize, storage[i].size());
+			}
 		}
 		return largestListSize;
 	}
@@ -220,7 +225,12 @@ public class ChainingHashTable implements Set<String> {
 		int smallestListSize=100;
 		for(int i = 0; i < storage.length; i++)
 		{
-			smallestListSize = Math.min(smallestListSize, storage[i].size());
+			if(storage[i] == null){
+				smallestListSize = Math.min(smallestListSize, 0);
+			}
+			else{
+				smallestListSize = Math.min(smallestListSize, storage[i].size());
+			}
 		}
 		return smallestListSize;
 	}
