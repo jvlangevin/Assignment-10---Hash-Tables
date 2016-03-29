@@ -228,8 +228,6 @@ public class QuadProbeHashTable implements Set<String>{
 		this.clear();
 		this.table = tempHash;
 		this.addAll(valueHolder);
-	
-	
 	}
 
 	public int timesRehashed(){
@@ -245,7 +243,6 @@ public class QuadProbeHashTable implements Set<String>{
 	}
 	
 	public String getItemByIndex(int index){
-		
 		return this.table[index];
 	}
 	

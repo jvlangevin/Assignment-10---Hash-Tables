@@ -12,8 +12,6 @@ public class TestQuadProbe {
 	
 	public static void main(String[] args){
 		
-		
-		
 		HashFunctor functor = new GoodHashFunctor();
 		QuadProbeHashTable test = new QuadProbeHashTable(INITIAL_SIZE, functor);
 		

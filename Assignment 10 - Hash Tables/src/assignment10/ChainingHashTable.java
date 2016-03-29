@@ -1,5 +1,6 @@
 package assignment10;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -9,6 +10,9 @@ public class ChainingHashTable implements Set<String> {
 	private HashFunctor hashFunctor;
 	private LinkedList<String>[] storage;
 	private int storageSize;
+	private int rehashes;
+	private int collisions;
+	private static final int maxLoadFactor = 10;
 
 	@SuppressWarnings("unchecked")
 	public ChainingHashTable(int capacity, HashFunctor functor){
@@ -23,12 +27,18 @@ public class ChainingHashTable implements Set<String> {
 		if(contains(item)){
 			return false;
 		}
+		if(this.getLoadFactor() >= maxLoadFactor){
+			this.rehash(getNextPrime(storage.length));
+		}
 		
 		int index = hashFunctor.hash(item) % storage.length;
 		
 		if(storage[index] == null){
 			storage[index] = new LinkedList<>();
 			storageSize++;
+		}
+		else{
+			collisions++;
 		}
 		
 		storage[index].addLast(item);
@@ -100,6 +110,10 @@ public class ChainingHashTable implements Set<String> {
 	 */
 	private int getLoadFactor(){
 		
+		if(storageSize == 0){
+			return 0;
+		}
+		
 		int totalListSize = 0;
 		
 		for(int i = 0; i < storage.length; i++){
@@ -112,4 +126,79 @@ public class ChainingHashTable implements Set<String> {
 		return averageListSize;
 	}
 	
+	/**
+	 * Increases the table's capacity to the specified amount and rehashes the items
+	 * contained in the table.
+	 * 
+	 * @param newStorageSize -- the new size of the hash table
+	 */
+	@SuppressWarnings("unchecked")
+	private void rehash(int newStorageSize){
+		
+		LinkedList<String>[] tempHash = (LinkedList<String>[]) new LinkedList[newStorageSize];
+		ArrayList<String> valueHolder =  new ArrayList<>();
+		
+		for(int i = 0; i < storage.length; i++){
+			if(storage[i] != null){
+				valueHolder.addAll(storage[i]);
+			}
+		}
+		
+		this.clear();
+		storage = tempHash;
+		this.addAll(valueHolder);
+		rehashes++;
+	}
+	
+	/**
+	 * 
+	 * Returns true if the specified integer is prime, returns false otherwise.
+	 */
+	private static boolean isPrime(int num){
+		
+		if(num == 2){
+			return true;
+		}
+		if(num <= 1 || num % 2 == 0){
+			return false;
+		}
+		
+		for(int i = 3; i*i <= num; i += 2){
+			if(num % i == 0){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * Returns the next largest prime after the specified number.
+	 */
+	private static int getNextPrime(int num){
+		
+		if(num == 2){
+			return 3;
+		}
+		if(num % 2 == 0){
+			num++;
+		}
+		
+		do{
+			num += 2;
+		}while(!isPrime(num));
+		
+		return num;
+	}
+	
+	public int timesRehashed(){
+		return rehashes;
+	}
+	
+	public int collisionCount(){
+		return collisions;
+	}
+	
+	public int tableLength(){
+		return storage.length;
+	}
 }
