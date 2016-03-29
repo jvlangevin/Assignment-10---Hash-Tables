@@ -2,7 +2,6 @@ package assignment10;
 
 public class GoodHashFunctor implements HashFunctor {
 
-	
 	//return value will be the value of the character multiplied by twice the position in the string
 	@Override
 	public int hash(String item) {
@@ -12,5 +11,4 @@ public class GoodHashFunctor implements HashFunctor {
 		}
 		return index+item.length();
 	}
-
 }

@@ -27,9 +27,9 @@ public class ChainingHashTable implements Set<String> {
 		if(contains(item)){
 			return false;
 		}
-		if(this.getLoadFactor() >= maxLoadFactor){
-			this.rehash(getNextPrime(storage.length*2));
-		}
+//		if(this.getLoadFactor() >= maxLoadFactor){
+//			this.rehash(getNextPrime(storage.length*2));
+//		}
 		
 		int index = hashFunctor.hash(item) % storage.length;
 		
@@ -49,9 +49,9 @@ public class ChainingHashTable implements Set<String> {
 	@Override
 	public boolean addAll(Collection<? extends String> items) {
 
-		if(items.size()+this.size > storage.length*maxLoadFactor){
-			this.rehash(getNextPrime((items.size()+this.size)/maxLoadFactor));
-		}
+//		if(items.size()+this.size > storage.length*maxLoadFactor){
+//			this.rehash(getNextPrime((items.size()+this.size)/maxLoadFactor));
+//		}
 		
 		int initialSize = size;
 

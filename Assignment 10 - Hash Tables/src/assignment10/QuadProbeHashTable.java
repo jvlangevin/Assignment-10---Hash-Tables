@@ -246,4 +246,7 @@ public class QuadProbeHashTable implements Set<String>{
 		return this.table[index];
 	}
 	
+	public static void main(String[] args){
+		System.out.println(28 % 10);
+	}
 }
