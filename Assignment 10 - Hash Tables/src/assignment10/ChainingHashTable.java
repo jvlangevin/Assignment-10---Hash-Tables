@@ -28,7 +28,7 @@ public class ChainingHashTable implements Set<String> {
 			return false;
 		}
 		if(this.getLoadFactor() >= maxLoadFactor){
-			this.rehash(getNextPrime(storage.length));
+			this.rehash(getNextPrime(storage.length*2));
 		}
 		
 		int index = hashFunctor.hash(item) % storage.length;
@@ -49,12 +49,14 @@ public class ChainingHashTable implements Set<String> {
 	@Override
 	public boolean addAll(Collection<? extends String> items) {
 
+		if(items.size()+this.size > storage.length*maxLoadFactor){
+			this.rehash(getNextPrime((items.size()+this.size)/maxLoadFactor));
+		}
+		
 		int initialSize = size;
 
-		for (String item : items) {
-			if (!contains(item)) {
+		for (String item : items) {	
 				add(item);
-			}
 		}
 
 		if (size != initialSize) {
@@ -135,12 +137,15 @@ public class ChainingHashTable implements Set<String> {
 	@SuppressWarnings("unchecked")
 	private void rehash(int newStorageSize){
 		
+		
+		
 		LinkedList<String>[] tempHash = (LinkedList<String>[]) new LinkedList[newStorageSize];
 		ArrayList<String> valueHolder =  new ArrayList<>();
 		
 		for(int i = 0; i < storage.length; i++){
 			if(storage[i] != null){
-				valueHolder.addAll(storage[i]);
+				for(String entry : storage[i])
+				valueHolder.add(entry);
 			}
 		}
 		
@@ -200,5 +205,14 @@ public class ChainingHashTable implements Set<String> {
 	
 	public int tableLength(){
 		return storage.length;
+	}
+	
+	public int getLargestListSize(){
+		int largestListSize =0;
+		for(int i = 0; i < storage.length; i++)
+		{
+			largestListSize = Math.max(largestListSize, storage[i].size());
+		}
+		return largestListSize;
 	}
 }

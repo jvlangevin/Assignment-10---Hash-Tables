@@ -17,11 +17,20 @@ public class TestChainingHash {
 		
 		cht.addAll(list);
 		
+		
+		if(cht.contains("radish")){
+			System.out.println("Contains and add works.");
+		}
+		else{
+			System.out.println("Problems with contains/add.");
+		}
 		System.out.println("Number of rehashes: " + cht.timesRehashed());
 		System.out.println("Number of collisions: " + cht.collisionCount());
 		System.out.println("Size of table: " + cht.size());
 		System.out.println("Length of storage array: " + cht.tableLength());
 		System.out.println("Collisions per word: " + (double)(cht.collisionCount())/cht.size());
+		
+		System.out.println("Largest list size: " + cht.getLargestListSize());
 	}
 
 	private static List<String> readFromFile(File file) {
