@@ -31,6 +31,7 @@ public class TestChainingHash {
 		System.out.println("Collisions per word: " + (double)(cht.collisionCount())/cht.size());
 		
 		System.out.println("Largest list size: " + cht.getLargestListSize());
+		System.out.println("Smallest list size: " + cht.getSmallestListSize());
 	}
 
 	private static List<String> readFromFile(File file) {

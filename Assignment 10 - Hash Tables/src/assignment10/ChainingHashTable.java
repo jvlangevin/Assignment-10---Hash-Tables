@@ -215,4 +215,13 @@ public class ChainingHashTable implements Set<String> {
 		}
 		return largestListSize;
 	}
+	
+	public int getSmallestListSize(){
+		int smallestListSize=100;
+		for(int i = 0; i < storage.length; i++)
+		{
+			smallestListSize = Math.min(smallestListSize, storage[i].size());
+		}
+		return smallestListSize;
+	}
 }
