@@ -114,7 +114,6 @@ public class QuadProbeHashTable implements Set<String>{
 			//if the item is found, return true;
 			if(this.table[index].equals(item))
 			{
-				System.out.println("If was true");
 				return true;
 			}
 			
