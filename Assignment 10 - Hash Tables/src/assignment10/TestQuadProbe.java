@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 public class TestQuadProbe {
@@ -41,7 +42,7 @@ public class TestQuadProbe {
 			
 		}
 		
-	}
+}
 	
 	private static List<String> readFromFile(File file) {
 		ArrayList<String> words = new ArrayList<String>();
@@ -78,4 +79,6 @@ public class TestQuadProbe {
 
 		return words;
 	}
+	
+	
 }

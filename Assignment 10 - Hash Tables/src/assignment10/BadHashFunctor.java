@@ -2,14 +2,12 @@ package assignment10;
 
 public class BadHashFunctor implements HashFunctor{
 
-	//this BadHasFunctor returns a value based on the first character
+	/**
+	 * Returns a hash value based on the number of characters in the string.
+	 */
 	@Override
 	public int hash(String item) {
-		return Character.getNumericValue(item.charAt(0));
+		return item.length();
 	}
 
-	public static void main(String[] args){
-		String s = "a";
-		System.out.println(Character.getNumericValue('z'));
-	}
 }

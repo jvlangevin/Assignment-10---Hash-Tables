@@ -2,11 +2,18 @@ package assignment10;
 
 public class MediocreHashFunctor implements HashFunctor{
 
-	//this has returns an index value based on the length of the string
+	/**
+	 * Returns a hash value based on the sum of the integer values
+	 * of each character in the string.
+	 */
 	@Override
 	public int hash(String item) {
-		
-		return item.length();
+
+		int sum = 0;
+		for(int i = 0; i < item.length(); i++){
+			sum += Character.getNumericValue(item.charAt(i));
+		}
+		return sum;
 	}
 
 }

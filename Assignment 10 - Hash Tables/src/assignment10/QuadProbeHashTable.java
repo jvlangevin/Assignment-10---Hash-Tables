@@ -48,9 +48,12 @@ public class QuadProbeHashTable implements Set<String>{
 		int index = initialIndex;
 		int quadValue = 1;
 		
+		if(table[initialIndex] != null){
+			collisions++;
+		}
+		
 		while(this.table[index] != null)
 		{
-			this.collisions++;
 			index = initialIndex;
 			
 			/*if the index isn't empty the index should increase at a rate
@@ -101,6 +104,7 @@ public class QuadProbeHashTable implements Set<String>{
 
 	@Override
 	public boolean contains(String item) {
+		
 		int initialIndex = hashFunctor.hash(item) % table.length;
 		int index = initialIndex;
 		int quadValue = 1;
@@ -245,7 +249,4 @@ public class QuadProbeHashTable implements Set<String>{
 		return this.table[index];
 	}
 	
-	public static void main(String[] args){
-		System.out.println(28 % 10);
-	}
 }

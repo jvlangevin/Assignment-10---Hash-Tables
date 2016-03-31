@@ -246,10 +246,8 @@ public class HashTablesTest {
 	@Test
 	public void chainingHashAddCollectionContainAllMedicoreHash(){
 		chainingHashTable = new ChainingHashTable(11, mediocreHashFunctor);
-		
 		chainingHashTable.addAll(stringCollection);
 		
-
 		assertEquals(stringCollection.size(), chainingHashTable.size());
 		assertEquals(true, chainingHashTable.contains("radiantly"));
 		assertEquals(true, chainingHashTable.containsAll(stringCollection));
