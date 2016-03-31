@@ -28,6 +28,11 @@ public class QuadProbeHashTable implements Set<String>{
 	   this.hashFunctor = functor;
    }
 	
+   
+   /**
+    * Takes a string and add's it to our HashTable following a quadratic probing sequence to
+    * account for any possible collisions, making sure the item isn't already contained.
+    */
 	@Override
 	public boolean add(String item) {
 		
@@ -70,12 +75,17 @@ public class QuadProbeHashTable implements Set<String>{
 		return true;
 	}
 
+	/**
+	 * Takes a collection of strings and uses the add(string) method on each item
+	 * Note: on a collection, we rehash to 3x the size of the collection if the existing strings
+	 * plus the ones that we're adding are more than half the size of the existing table length
+	 */
 	@Override
 	public boolean addAll(Collection<? extends String> items) {
 
 		int initialSize = size;
 		
-		if(items.size() > (table.length/2)+this.size())
+		if(items.size()+this.size() > (table.length/2))
 		{
 			this.rehash(items.size()*3);
 
@@ -93,6 +103,9 @@ public class QuadProbeHashTable implements Set<String>{
 		return false;
 	}
 
+	/**
+	 * Nulls out each item in the table and sets size to 0
+	 */
 	@Override
 	public void clear() {
 
@@ -102,6 +115,13 @@ public class QuadProbeHashTable implements Set<String>{
 		this.size = 0;
 	}
 
+	
+	/**
+	 * Uses the hash table to obtain the starting index and uses the quadratic probing process
+	 * to check if the item is contained. If it returns a null, the item is not contained. Since the table
+	 * gets resized to the point that it's never more than 50 percent full, and the size is always a prime,
+	 * a null will eventually be reached if it is not contained.
+	 */
 	@Override
 	public boolean contains(String item) {
 		
@@ -134,6 +154,9 @@ public class QuadProbeHashTable implements Set<String>{
 		return false;
 	}
 
+	/**
+	 * Runs the contains method over each item in a collection
+	 */
 	@Override
 	public boolean containsAll(Collection<? extends String> items) {
 
@@ -145,11 +168,17 @@ public class QuadProbeHashTable implements Set<String>{
 		return true;
 	}
 
+	/**
+	 * Checks to see if the hashtable is empty
+	 */
 	@Override
 	public boolean isEmpty() {
 		return size() == 0;
 	}
 
+	/**
+	 * Returns the number of elements in our hashtable.
+	 */
 	@Override
 	public int size() {
 		return size;
@@ -233,10 +262,19 @@ public class QuadProbeHashTable implements Set<String>{
 		this.addAll(valueHolder);
 	}
 
+	
+	/**
+	 * Helper method, returns the number of times a table was rehashed.
+	 * @return
+	 */
 	public int timesRehashed(){
 		return this.rehashedCount;
 	}
 	
+	/**
+	 * Helper method, returns the number of collisions for the entirety of the hashtables life
+	 * @return
+	 */
 	public int collisionCount(){
 		return this.collisions;
 	}

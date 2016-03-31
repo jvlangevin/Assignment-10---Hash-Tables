@@ -14,6 +14,14 @@ public class ChainingHashTable implements Set<String> {
 	private int collisions;
 	private static final int maxLoadFactor = 10;
 
+	
+	/**
+	 * Constructor:
+	 * Builds a new hash table which contains a capacity sized array of linked lists
+	 * and assigns a hashfunctor for hashing our strings
+	 * @param capacity
+	 * @param functor
+	 */
 	@SuppressWarnings("unchecked")
 	public ChainingHashTable(int capacity, HashFunctor functor){
 
@@ -21,15 +29,20 @@ public class ChainingHashTable implements Set<String> {
 		hashFunctor = functor;
 	}
 
+	
+	/**
+	 * If a string is not already contained, adds a string using a hash functor to find which
+	 * linked list the string should be added to. 
+	 */
 	@Override
 	public boolean add(String item) {
 		
 		if(contains(item)){
 			return false;
 		}
-//		if(this.getLoadFactor() >= maxLoadFactor){
-//			this.rehash(getNextPrime(storage.length*2));
-//		}
+		if(this.getLoadFactor() >= maxLoadFactor){
+			this.rehash(getNextPrime(storage.length*2));
+		}
 		
 		int index = hashFunctor.hash(item) % storage.length;
 		
@@ -46,12 +59,16 @@ public class ChainingHashTable implements Set<String> {
 		return true;
 	}
 
+	
+	/**
+	 * Performs the add() method to each string in a collection.
+	 */
 	@Override
 	public boolean addAll(Collection<? extends String> items) {
 
-//		if(items.size()+this.size > storage.length*maxLoadFactor){
-//			this.rehash(getNextPrime((items.size()+this.size)/maxLoadFactor));
-//		}
+		if(items.size()+this.size > storage.length*maxLoadFactor){
+			this.rehash(getNextPrime((items.size()+this.size)/maxLoadFactor));
+		}
 		
 		int initialSize = size;
 
@@ -65,6 +82,9 @@ public class ChainingHashTable implements Set<String> {
 		return false;
 	}
 
+	/**
+	 * Clears out the linked list items
+	 */
 	@Override
 	public void clear() {
 
@@ -74,6 +94,9 @@ public class ChainingHashTable implements Set<String> {
 		this.size = 0;
 	}
 
+	/**
+	 * Uses the hash functor to see if the item is contained.
+	 */
 	@Override
 	public boolean contains(String item) {
 
@@ -86,6 +109,9 @@ public class ChainingHashTable implements Set<String> {
 		return storage[index].contains(item);
 	}
 
+	/**
+	 * Runs the contains method on each string in a collection
+	 */
 	@Override
 	public boolean containsAll(Collection<? extends String> items) {
 
@@ -97,11 +123,17 @@ public class ChainingHashTable implements Set<String> {
 		return true;
 	}
 
+	/**
+	 * checks to see if the hashtable contains no elements
+	 */
 	@Override
 	public boolean isEmpty() {
 		return size() == 0;
 	}
 
+	/**
+	 * returns the number of elements in the hashtable
+	 */
 	@Override
 	public int size() {
 		return size;
